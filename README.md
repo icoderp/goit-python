@@ -1,1 +1,1 @@
-# goit-python
+## Homework module Core, Python
