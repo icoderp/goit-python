@@ -7,6 +7,10 @@ class AbstractRecord(ABC):
         ...
 
     @abstractmethod
+    def __str__(self):
+        ...
+
+    @abstractmethod
     def add_phone(self, phone):
         ...
 
@@ -33,3 +37,15 @@ class AbstractRecord(ABC):
     @abstractmethod
     def days_to_birthday(self, birthday):
         ...
+
+
+class AbstractAddressBook(ABC):
+    def add_record(self, record):
+        ...
+
+    def iterator(self, func=None, days=0):
+        ...
+
+
+class AbstractHelp(ABC):
+    ...

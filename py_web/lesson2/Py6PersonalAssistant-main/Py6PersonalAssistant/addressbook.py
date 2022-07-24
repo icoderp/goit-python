@@ -1,7 +1,7 @@
 from collections import UserDict
 from datetime import date
 from pathlib import Path
-from abstract_ABook import AbstractRecord
+from abstract_class import AbstractRecord, AbstractAddressBook, AbstractHelp  # Homework 2
 import datetime
 import pickle
 import re
@@ -121,7 +121,7 @@ class Address(Field):
         self.__value = value
 
 
-class Record(AbstractRecord):
+class Record(AbstractRecord):  # Homework 2
     def __init__(self, name: Name, phones=[], birthday=None, email=None, address=None) -> None:
         self.name = name
         self.phone_list = phones
@@ -165,7 +165,7 @@ class Record(AbstractRecord):
         return (birthday_day - right_now).days
 
 
-class AddressBook(UserDict):
+class AddressBook(UserDict, AbstractAddressBook):  # Homework 2
     def __init__(self):
         super().__init__()
         self.n = None
@@ -184,6 +184,32 @@ class AddressBook(UserDict):
                     yield print_block
                     index, print_block = 1, ''
         yield print_block
+
+
+class OutputHelp(AbstractHelp):  # Homework 2
+    help_command = """Command format:
+        help or ? -> this help;
+        hello -> greeting;
+        add (name) (phone) (birthday) (email) (address) -> 1st use: add user to directory, 2nd use: add 1 more phone number;
+        info (name) -> all information about user;
+        delete user (name) -> delete user from address book;
+        change phone (name) (old_phone) (new_phone) -> change the user's phone number;
+        show phone (name) -> show all user`s phones;
+        delete phone (name) (phone) -> delete the user's phone number;
+        show all -> show data of all users;
+        show birthday (name) -> show user`s birthday;
+        update birthday (name) (birthday) -> add/update user`s birthday;
+        delete birthday (name) (birthday) -> delete user`s birthday;
+        birthdays in (number) -> show users with birthday in number days;
+        show email (name) -> show user`s email;
+        update email (name) (email) -> add/update user`s email;
+        delete email (name) (email) -> delete user`s email;
+        show address (name) -> show user`s address;
+        update address (name) (address) -> add/update user`s address;
+        delete address (name) (address) -> delete user`s address;
+        search -> show users with matches for you request (WARNING! All user`s info should be filled,
+        'None' fields will cause error);
+        goodbye or close or exit or . - exit the program"""
 
 
 class DateError(Exception):
@@ -376,29 +402,7 @@ def unknown_command(*args):
 
 
 def helping(*args):
-    return """Command format:
-        help or ? -> this help;
-        hello -> greeting;
-        add (name) (phone) (birthday) (email) (address) -> 1st use: add user to directory, 2nd use: add 1 more phone number;
-        info (name) -> all information about user;
-        delete user (name) -> delete user from address book;
-        change phone (name) (old_phone) (new_phone) -> change the user's phone number;
-        show phone (name) -> show all user`s phones;
-        delete phone (name) (phone) -> delete the user's phone number;
-        show all -> show data of all users;
-        show birthday (name) -> show user`s birthday;
-        update birthday (name) (birthday) -> add/update user`s birthday;
-        delete birthday (name) (birthday) -> delete user`s birthday;
-        birthdays in (number) -> show users with birthday in number days;
-        show email (name) -> show user`s email;
-        update email (name) (email) -> add/update user`s email;
-        delete email (name) (email) -> delete user`s email;
-        show address (name) -> show user`s address;
-        update address (name) (address) -> add/update user`s address;
-        delete address (name) (address) -> delete user`s address;
-        search -> show users with matches for you request (WARNING! All user`s info should be filled,
-        'None' fields will cause error);
-        goodbye or close or exit or . - exit the program"""
+    return OutputHelp.help_command
 
 
 file_name = 'AddressBook.bin'
