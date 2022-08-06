@@ -25,9 +25,8 @@ def handle_archive(filename: Path, target_folder: Path):
     try:
         shutil.unpack_archive(str(filename.resolve()), str(folder_for_file.resolve()))
     except shutil.ReadError:
-        print(f'Wrong - it`s not an archive {filename}!')
+        logging.debug(f'Wrong - it`s not an archive {filename}!')
         folder_for_file.rmdir()
-        return None
     filename.unlink()
 
 
@@ -35,7 +34,7 @@ def handle_folder(folder: Path):
     try:
         folder.rmdir()
     except OSError:
-        print(f'Not able to delete {folder}')
+        logging.debug(f'Not able to delete {folder}')
 
 
 def file_parser(*args):
@@ -43,9 +42,9 @@ def file_parser(*args):
         folder_for_scan = Path(args[0])
         scan(folder_for_scan.resolve())
     except FileNotFoundError:
-        return f"There isn`t '{args[0]}' folder. Try again."
+        logging.debug(f"There isn`t '{args[0]}' folder. Try again.")
     except IndexError:
-        return "Please enter a folder name you want to sort."
+        logging.debug("Please enter a folder name you want to sort.")
 
     for file in JPEG_IMAGES:
         handle_media(file, Path(args[0]) / 'images' / 'JPEG')
@@ -100,7 +99,7 @@ def file_parser(*args):
     for folder in FOLDERS[::-1]:
         handle_folder(folder)
 
-    return f'Files in {args[0]} was sorted.'
+    logging.debug(f'Files in {args[0]} was sorted.')
 
 
 if __name__ == '__main__':
