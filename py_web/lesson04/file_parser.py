@@ -1,5 +1,4 @@
 from pathlib import Path
-from main import main
 
 JPEG_IMAGES = []
 JPG_IMAGES = []
@@ -61,21 +60,20 @@ REGISTER_EXTENSIONS = {
 FOLDERS = []
 EXTENSIONS = set()
 UNKNOWN = set()
-work_folder = Path('.')
 
 
 def get_extension(filename: str) -> str:
     return Path(filename).suffix[1:].upper()
 
 
-def connect(folder):
+def scan(folder: Path) -> None:
     for item in folder.iterdir():
         if item.is_dir():
-            if item.name not in ('archives', 'video', 'audio', 'documents', 'images', 'OTHERS'):
+            if item.name not in ('archives', 'video', 'audio', 'documents', 'images', 'OTHER'):
                 FOLDERS.append(item)
-                connect(item)
+                scan(item)
             continue
-        print(item.name)
+
         ext = get_extension(item.name)
         fullname = folder / item.name
         if not ext:
@@ -88,5 +86,3 @@ def connect(folder):
             except KeyError:
                 UNKNOWN.add(ext)
                 OTHER.append(fullname)
-
-    return main(folder)
