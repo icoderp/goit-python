@@ -26,21 +26,36 @@ def callback(result):
     #              380395, 532553, 760790, 1065106, 1521580, 2130212, 2662765, 5325530, 10651060]
 
 
-if __name__ == '__main__':
-    print("A normal test.")
-    timer = time()
-    a, b, c, d = factorize(128, 255, 99999, 10651060)
+def asserting(a, b, c, d, timer):
     assert a == [1, 2, 4, 8, 16, 32, 64, 128]
     assert b == [1, 3, 5, 15, 17, 51, 85, 255]
     assert c == [1, 3, 9, 41, 123, 271, 369, 813, 2439, 11111, 33333, 99999]
     assert d == [1, 2, 4, 5, 7, 10, 14, 20, 28, 35, 70, 140, 76079, 152158, 304316,
                  380395, 532553, 760790, 1065106, 1521580, 2130212, 2662765, 5325530, 10651060]
-    print(f'Time spent is: {round(time() - timer, 4)} second.')
+    print(f'Time spent is {round(time() - timer, 4)} seconds.')
 
+
+if __name__ == '__main__':
+    print("A normal test.")
+    timer = time()
+    a, b, c, d = factorize(128, 255, 99999, 10651060)
+    asserting(a, b, c, d, timer)
+
+    print(f"{'_' * 50}")
     cpu = cpu_count()
     print(f'Your computer has: {cpu} CPU')
+
     for n in range(1, cpu + 1):
-        print(f"Test spead CPU: {n}.")
+        print(f"Test spead  <pool.map> CPU: {n}.")
+        start_time = time()
+        with Pool(processes=n) as pool:
+            a, b, c, d = pool.map(factorize, (128, 255, 99999, 10651060))
+            asserting(a[0], b[0], c[0], d[0], start_time)
+
+    print(f"{'_' * 50}")
+
+    for n in range(1, cpu + 1):
+        print(f"Test spead <pool.map_async> CPU: {n}.")
         start_time = time()
         with Pool(processes=n) as pool:
             pool.map_async(factorize, [128, 255, 99999, 10651060], callback=callback)
