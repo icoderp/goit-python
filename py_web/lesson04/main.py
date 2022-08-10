@@ -106,5 +106,5 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(threadName)s %(message)s')
     timer = time()
     with ThreadPoolExecutor(max_workers=4) as executor:
-        executor.submit(file_parser, Path("E:\\Download\\Мусор\\sort"))
+        executor.submit(file_parser, Path("E:\\Download\\sort"))
         logging.debug(f'Speed test work with Pool (4 Threads) = {round(time() - timer, 4)}')
