@@ -1,3 +1,4 @@
+from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import Pool, cpu_count
 from time import time
 
@@ -57,3 +58,12 @@ if __name__ == '__main__':
             pool.close()
             pool.join()
         print(f'Time spent is: {round(time() - start_time, 4)} second.')
+
+    print(f"{'_' * 50}")
+
+    for n in range(1, cpu + 1):
+        print(f"Test spead <ProcessPoolExecutor> CPU: {n}.")
+        start_time = time()
+        with ProcessPoolExecutor(max_workers=n) as executor:
+            a, b, c, d = executor.map(factorize, (128, 255, 99999, 10651060))
+            asserting(a[0], b[0], c[0], d[0], start_time)
