@@ -9,3 +9,10 @@
 Для проверки правильности работы алгоритма самой функции можете воспользоваться тестом:
 
 ![](Image/image.png)
+
+## 8 CPU best result
+1. A normal test. Time: 1.103 seconds.
+2. Test spead  pool.map CPU: 5. Time 1.13 seconds.
+3. Test spead pool.map_async CPU: 2. Time: 1.067 second.
+4. Test spead ProcessPoolExecutor CPU: 1. Time: 1.09 seconds.
+5. Test spead Thread 5. ThreadPoolExecutor. Time: 1.022 seconds.
