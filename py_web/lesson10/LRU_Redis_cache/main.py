@@ -33,7 +33,7 @@ def fibonacci_cache_lru(n):
     elif n == 1:
         return 1
     else:
-        return fibonacci_cache(n - 1) + fibonacci_cache(n - 2)
+        return fibonacci_cache_lru(n - 1) + fibonacci_cache_lru(n - 2)
 
 
 start_time = timeit.default_timer()
