@@ -3,7 +3,7 @@ import re
 from datetime import date
 import phonenumbers
 from abc import ABC, abstractmethod
-from func import *
+from PA_MongoDB.src.func import *
 
 
 class Field(ABC):
@@ -194,7 +194,7 @@ def change_contact(*args):
 def show_all(*args):
     num_users = Contact.objects.count()
     pag = '-' * 70
-    print(f'{pag}\nContact list\n{pag}')
+    print(f'{pag}\nContacts: {num_users}\nContact list\n{pag}')
     for c in Contact.objects:
         print(
             f'Name: {c.first_name} \n'
@@ -204,7 +204,7 @@ def show_all(*args):
             f'Birthday: {c.birthday}\n'
             f'Address: {c.address}\n'
             f'{pag}')
-    return num_users
+    return 'The operation was successful'
 
 
 @InputError
@@ -245,14 +245,20 @@ def show_phone(*args):
 
 @InputError
 def del_user(*args):
-    first_name, last_name = args[0], args[1]
-    bd_delete_phone(first_name, last_name)
-    return f'Delete phone from user {first_name} {last_name}'
+    first_name = args[0]
+    last_name = args[1]
+    confirmation = input(f'Are you sure you want to delete the user {first_name}? (Y/n) >>> ').strip().lower()
+    if confirmation == 'y':
+        db_delete_contact(first_name, last_name)
+        return f'Delete user {first_name} {last_name}'
+
+    else:
+        return 'User not deleted'
 
 
 @InputError
 def clear_all(*args):
-    confirmation = input('Are you sure you want to delete all users? (y/n) ')
+    confirmation = input('Are you sure you want to delete all users? (Y/n) >>> ').strip().lower()
     if confirmation == 'y':
         bd_delete_all()
         return 'Address book is empty'
@@ -262,48 +268,57 @@ def clear_all(*args):
 
 @InputError
 def add_email(*args):
-    ...
+    first_name, last_name, email = args[0], args[1], args[2]
+    bd_update_email(first_name, last_name, email)
+    return f'Add/modify email {email} to user {first_name} {last_name}'
 
 
 @InputError
 def add_address(*args):
-    ...
+    first_name, last_name, address = args[0], args[1], list(args[2:])
+    address = " ".join(address)
+    bd_update_address(first_name, last_name, address)
+    return f'Add/modify address {address.title()} to user {first_name} {last_name}'
 
 
 @InputError
 def add_last_name(*args):
-    ...
+    first_name, last_name = args[0], args[1]
+    bd_update_last_name(first_name, last_name)
+    return f'Add/modify last name {last_name} to user {first_name}'
 
 
 @InputError
 def find(*args):
-    ...
+    sub = ' '.join(args)
+    data = bd_find_data(sub)
+    return data
 
 
 def info():
     return """
     *********** Service command ***********
-    "help", "?"          --> Commands list
-    "close", "exit", "." --> Exit from AddressBook
+    "help", "?"                                 --> Commands list
+    "close", "exit", "."                        --> Exit from AddressBook
 
     *********** Add/edit command **********
-    "add" name last name  phone                  --> Add user to AddressBook
-    "change" name last name  new_phone --> Change the user's phone number
-    "birthday" name last name birthday          --> Add/edit user birthday
-    "email" name last name email                --> Add/edit user email
-    "last name" name last name        --> Add/edit user last name
-    "address" name last name address            --> Add/edit user address
+    "add" first name last name  phone           --> Add user to AddressBook
+    "change" first name last name  new_phone    --> Change the user's phone number
+    "birthday" first name last name birthday    --> Add/edit user birthday
+    "email" first name last name email          --> Add/edit user email
+    "last name" first name last name            --> Add/edit user last name
+    "address" first name last name address      --> Add/edit user address
 
     *********** Delete command ***********
-    "del" name last name --> Delete phone number
-    "delete" name last name    --> Delete user
-    "clear"          --> Delete all users
+    "del" first name last name                  --> Delete phone number
+    "delete" first name last name               --> Delete user
+    "clear"                                     --> Delete all users
 
     *********** Info command *************
-    "show" name last name          --> Show user info
-    "show all"           --> Show all users info
-    "user birthday" name last name  --> Show how many days to user birthday
-    "find" data          --> Find any data 
+    "show" first name last name                 --> Show user info
+    "show all"                                  --> Show all users info
+    "user birthday" first name last name        --> Show how many days to user birthday
+    "find" data                                 --> Find any data 
     """
 
 

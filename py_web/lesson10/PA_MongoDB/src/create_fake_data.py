@@ -1,4 +1,4 @@
-from models import Contact
+from PA_MongoDB.src.models import Contact
 from faker import Faker
 
 
@@ -29,4 +29,4 @@ def sanitize_phone(phone: str):
 
 
 if __name__ == '__main__':
-    create_contact(15)
+    create_contact(4)
