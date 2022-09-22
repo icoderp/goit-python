@@ -10,7 +10,7 @@ class Contact(Document):
     birthday = DateField()
     email = EmailField(required=True)
     address = StringField(max_length=300)
-    phone = StringField(max_length=20, required=True)
+    phone = ListField(max_length=20, required=True)
     meta = {'indexes': [
         {
          'fields': ['first_name', "$last_name", "$birthday", "$email", "$address", "$phone"],
